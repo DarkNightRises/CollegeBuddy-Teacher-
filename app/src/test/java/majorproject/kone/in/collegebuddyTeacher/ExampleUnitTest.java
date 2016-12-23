@@ -1,4 +1,4 @@
-package majorproject.kone.in.collegebuddy;
+package majorproject.kone.in.collegebuddyTeacher;
 
 import org.junit.Test;
 
