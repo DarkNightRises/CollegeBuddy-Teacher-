@@ -30,17 +30,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import majorproject.kone.in.collegebuddyTeacher.Config;
 import majorproject.kone.in.collegebuddyTeacher.R;
+import majorproject.kone.in.collegebuddyTeacher.listener.NetworkResponseListener;
+import majorproject.kone.in.collegebuddyTeacher.model.Teacher;
+import majorproject.kone.in.collegebuddyTeacher.network.FetchData;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>,NetworkResponseListener {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -57,7 +66,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -65,6 +73,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private Button register;
+    private FetchData fetchData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,9 +166,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
+
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -197,8 +204,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+//            mAuthTask = new UserLoginTask(email, password);
+//            mAuthTask.execute((Void) null);
+            try {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("email",email);
+                jsonObject.put("password",password);
+
+                fetchData = new FetchData(LoginActivity.this,LoginActivity.this);
+                fetchData.setUrl(Config.BASE_URL+Config.LOGIN);
+                fetchData.setType_of_request(Config.POST);
+                fetchData.setData(jsonObject);
+                fetchData.execute();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
@@ -291,6 +314,30 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView.setAdapter(adapter);
     }
 
+    @Override
+    public void preRequest() throws MalformedURLException {
+
+    }
+
+    @Override
+    public void postRequest(String result) throws MalformedURLException {
+        if (result != null) {
+            try {
+                JSONObject resultObject = new JSONObject(result);
+                if(resultObject.getBoolean("success")==true){
+                    JSONObject dataObject = (JSONObject) resultObject.getJSONArray("data").get(0);
+                    //Save teacher
+                    Teacher teacher = new Teacher(dataObject);
+                    Intent intent = new Intent(LoginActivity.this,NavigationActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.fade_in,
+                            android.R.anim.fade_out);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -302,63 +349,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     **/
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-                Intent intent = new Intent(LoginActivity.this,NavigationActivity.class);
-                startActivity(intent);
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
 }
 
