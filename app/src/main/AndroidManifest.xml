@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -15,7 +16,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="majorproject.kone.in.collegebuddyTeacher.LoginActivity"
+            android:name="majorproject.kone.in.collegebuddyTeacher.activity.LoginActivity"
             android:configChanges="orientation|screenSize"
             android:label="Sign in">
             <intent-filter>
@@ -25,11 +26,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="majorproject.kone.in.collegebuddyTeacher.NavigationActivity"
+            android:name="majorproject.kone.in.collegebuddyTeacher.activity.NavigationActivity"
             android:label="@string/title_activity_navigation"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="digirestro.in.digifood.activity.NavigationActivity" />
+                <action android:name="majorproject.kone.in.collegebuddyTeacher.activity.NavigationActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="majorproject.kone.in.collegebuddyTeacher.activity.SignUp"
+            android:label="@string/title_activity_navigation"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="majorproject.kone.in.collegebuddyTeacher.activity.SignUp" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
