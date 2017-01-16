@@ -1,6 +1,7 @@
 package majorproject.kone.in.collegebuddyTeacher.model;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +30,7 @@ public class Teacher {
 
     private void saveTeacherInfo() {
         SharedPreferences.Editor editor = SharedPreferencesSingleton.getSharedPreferenceEditor();
+        Log.d("Teacher info","Teacher info "+teacherInfo);
         try {
             editor.putInt(id,teacherInfo.getInt(id));
         editor.putString(name,teacherInfo.getString(name));
