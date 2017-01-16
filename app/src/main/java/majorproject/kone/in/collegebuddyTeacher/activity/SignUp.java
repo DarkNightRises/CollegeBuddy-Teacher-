@@ -112,7 +112,7 @@ public class SignUp extends Activity implements View.OnClickListener,NetworkResp
                     JSONObject dataObject = (JSONObject) resultObject.getJSONArray("data").get(0);
                     //Saving student Info
                     Teacher teacher = new Teacher(dataObject);
-                    Intent intent = new Intent(SignUp.this,NavigationActivity.class);
+                    Intent intent = new Intent(SignUp.this,EnterNumberOfSubjects.class);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in,
                             android.R.anim.fade_out);

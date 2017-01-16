@@ -17,13 +17,23 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="majorproject.kone.in.collegebuddyTeacher.activity.LoginActivity"
+            android:name="majorproject.kone.in.collegebuddyTeacher.activity.Splash"
             android:configChanges="orientation|screenSize"
             android:label="Sign in">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="majorproject.kone.in.collegebuddyTeacher.activity.LoginActivity"
+            android:label="@string/title_activity_navigation"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="majorproject.kone.in.collegebuddyTeacher.activity.LoginActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
@@ -45,7 +55,26 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
+        </activity> <activity
+        android:name="majorproject.kone.in.collegebuddyTeacher.activity.EnterNumberOfSubjects"
+        android:label="@string/title_activity_navigation"
+        android:theme="@style/AppTheme.NoActionBar">
+        <intent-filter>
+            <action android:name="majorproject.kone.in.collegebuddyTeacher.activity.EnterNumberOfSubjects" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+    </activity>
+        <activity
+        android:name="majorproject.kone.in.collegebuddyTeacher.activity.UploadSubject"
+        android:label="@string/title_activity_navigation"
+        android:theme="@style/AppTheme.NoActionBar">
+        <intent-filter>
+            <action android:name="majorproject.kone.in.collegebuddyTeacher.activity.UploadSubject" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+    </activity>
     </application>
 
 </manifest>

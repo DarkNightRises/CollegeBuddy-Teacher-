@@ -37,6 +37,8 @@ public class FetchData extends AsyncTask<String, Void, String> {
     private URL url;
     private HttpURLConnection urlConnection;
     Context mContext;
+    private boolean isHeader;
+    private String auth_token;
 
     public FetchData(NetworkResponseListener parserListener, Context context) {
         this.listener = parserListener;
@@ -46,7 +48,10 @@ public class FetchData extends AsyncTask<String, Void, String> {
     public void setType_of_request(String type_of_request) {
         this.type_of_request = type_of_request;
     }
-
+    public void setHeader(String authToken){
+        this.auth_token = authToken;
+        isHeader = true;
+    }
     public void setData(JSONObject JSONData) throws UnsupportedEncodingException, JSONException {
         fetchedData = convertString(JSONData);
         //    Toast.makeText(mContext,"FInal String "+fetchedData,Toast.LENGTH_SHORT).show();
@@ -91,7 +96,11 @@ public class FetchData extends AsyncTask<String, Void, String> {
             urlConnection.setRequestMethod(type_of_request);
             if(type_of_request.equals(Config.POST)) {
                 urlConnection.setDoOutput(true);
-            }urlConnection.connect();
+            }
+            if(isHeader){
+                urlConnection.setRequestProperty("auth-token",auth_token);
+            }
+            urlConnection.connect();
             if(type_of_request.equals(Config.POST)){
                 OutputStreamWriter wr = new OutputStreamWriter(urlConnection.getOutputStream());
                 wr.write(fetchedData);
